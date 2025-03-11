@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Compromissos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #e3e3e3;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 80%;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+    <script>
+        function adicionarCompromisso() {
+            let comando = document.getElementById("comando").value;
+            fetch("/adicionar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ comando: comando })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.mensagem);
+                location.reload();
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Agenda de Compromissos</h1>
+        <ul>
+            {% for compromisso in compromissos %}
+                <li>{{ compromisso.titulo }} - {{ compromisso.data_hora.strftime('%d/%m/%Y %H:%M') }}</li>
+            {% endfor %}
+        </ul>
+        <h2>Adicionar Compromisso</h2>
+        <input type="text" id="comando" placeholder="Digite o compromisso (ex: Reunião em 10/03/2025 14:00)">
+        <button onclick="adicionarCompromisso()">Adicionar</button>
+    </div>
+</body>
+</html>
